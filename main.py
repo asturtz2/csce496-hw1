@@ -78,18 +78,18 @@ def main(argv):
             print('TRAIN CROSS ENTROPY: ' + str(avg_train_ce))
 
             # report mean test loss
-            ce_vals = []
-            conf_mxs = []
-            for i in range(test_num_examples // batch_size):
-                batch_xs = test_images[i*batch_size:(i+1)*batch_size, :]
-                batch_ys = test_labels[i*batch_size:(i+1)*batch_size, :]
-                test_ce, conf_matrix = session.run([cross_entropy, confusion_matrix_op], {x: batch_xs, y: batch_ys})
-                ce_vals.append(test_ce)
-                conf_mxs.append(conf_matrix)
-            avg_test_ce = sum(ce_vals) / len(ce_vals)
-            print('TEST CROSS ENTROPY: ' + str(avg_test_ce))
-            #print('TEST CONFUSION MATRIX:')
-            #print(str(sum(conf_mxs)))
+#            ce_vals = []
+#            conf_mxs = []
+#            for i in range(test_num_examples // batch_size):
+#                batch_xs = test_images[i*batch_size:(i+1)*batch_size, :]
+#                batch_ys = test_labels[i*batch_size:(i+1)*batch_size, :]
+#                test_ce, conf_matrix = session.run([cross_entropy, confusion_matrix_op], {x: batch_xs, y: batch_ys})
+#                ce_vals.append(test_ce)
+#                conf_mxs.append(conf_matrix)
+#            avg_test_ce = sum(ce_vals) / len(ce_vals)
+#            print('TEST CROSS ENTROPY: ' + str(avg_test_ce))
+#            #print('TEST CONFUSION MATRIX:')
+#            #print(str(sum(conf_mxs)))
 
             ce_vals_v = []
             conf_mxs_v = []
