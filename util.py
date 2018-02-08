@@ -1,3 +1,5 @@
+import funcy
+
 def split_data(data, labels, proportion):
 
     size = data.shape[0]
@@ -5,7 +7,6 @@ def split_data(data, labels, proportion):
     s = np.random.permutation(size)
     split_idx = int(proportion * size)
     data = (data//255)
-    return data[s[:split_idx]],
-           data[s[split_idx:]],
-           labels[s[:split_idx]],
-           labels[s[split_idx:]]
+    return data[s[:split_idx]], data[s[split_idx:]], labels[s[:split_idx]], labels[s[split_idx:]]
+def batch(size):
+    return lambda xs: chunks(size, xs)
