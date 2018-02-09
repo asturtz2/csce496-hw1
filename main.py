@@ -6,7 +6,7 @@ import util
 import model
 
 flags = tf.app.flags
-flags.DEFINE_string('data_dir', '/work/cse496dl/shared/homework/01', 'directory where FMNIST is located')
+flags.DEFINE_string('data_dir', '/work/cse496dl/shared/homework/01/', 'directory where FMNIST is located')
 #TODO: What to use as save dir?
 flags.DEFINE_string('save_dir', 'hackathon_3', 'directory where model graph and weights are saved')
 flags.DEFINE_integer('batch_size', 32, '')
@@ -25,19 +25,19 @@ def main(argv):
     # split into train and validate
 
     proportion = FLAGS.proportion
-    train_images_2,  validation_image, train_labels_2, validation_labels = split_data(train_images,train_labels, proportion)
+    train_images_2,  validation_image, train_labels_2, validation_labels = util.split_data(train_images,train_labels, proportion)
 
     validation_set_num_examples =  validation_image.shape[0]
     train_num_examples = train_images_2.shape[0]
-    test_num_examples = test_images.shape[0]
+    #test_num_examples = test_images.shape[0]
 
 
 
     # TODO: Rewrite in terms of objects and with new architecture
     # specify the network
     input_placeholder = tf.placeholder(tf.float32, [None, 784],
-            name='input_placeholder')
-    output = layers(input)
+            name='input_placeholder1')
+    output = model.layers(input_placeholder)
     # define classification loss
     y = tf.placeholder(tf.float32, [None, 10], name='label')
 
@@ -68,7 +68,7 @@ def main(argv):
                 batch_xs = train_images_2[i*batch_size:(i+1)*batch_size, :]
                 batch_ys = train_labels_2[i*batch_size:(i+1)*batch_size, :]
                 #_, train_ce = session.run([train_op, tf.reduce_mean(cross_entropy)], {x: batch_xs, y: batch_ys})
-                _, train_ce = session.run([train_op, cross_entropy], {x: batch_xs, y: batch_ys})
+                _, train_ce = session.run([train_op, cross_entropy], {input_placeholder: batch_xs, y: batch_ys})
                 ce_vals.append(train_ce)
 
             avg_train_ce = sum(ce_vals) / len(ce_vals)
@@ -94,10 +94,10 @@ def main(argv):
 
             ce_vals_v = []
             conf_mxs_v = []
-            for i in range(test_num_examples // batch_size):
+            for i in range(validation_set_num_examples // batch_size):
                 batch_xsv = validation_image[i*batch_size:(i+1)*batch_size, :]
                 batch_ysv = validation_labels[i*batch_size:(i+1)*batch_size, :]
-                test_cev, conf_matrix_v = session.run([cross_entropy, confusion_matrix_op], {x: batch_xsv, y: batch_ysv})
+                test_cev, conf_matrix_v = session.run([cross_entropy, confusion_matrix_op], {input_placeholder: batch_xsv, y: batch_ysv})
                 ce_vals_v.append(test_cev)
                 conf_mxs_v.append(conf_matrix_v)
             avg_test_cev = sum(ce_vals_v) / len(ce_vals_v)
