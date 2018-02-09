@@ -1,15 +1,16 @@
 import tensorflow as tf
 import numpy as np
+
+
 import util
 import model
 
 flags = tf.app.flags
-flags.DEFINE_string('data_dir', '/work/cse496dl/shared/homework/01', 'directory
-                     where FMNIST is located')
+flags.DEFINE_string('data_dir', '/work/cse496dl/shared/homework/01', 'directory where FMNIST is located')
 #TODO: What to use as save dir?
 flags.DEFINE_string('save_dir', 'hackathon_3', 'directory where model graph and weights are saved')
 flags.DEFINE_integer('batch_size', 32, '')
-flags.DEFINE_integer('proportion', 0.8, '')
+flags.DEFINE_integer('proportion', 0.9, '')
 flags.DEFINE_integer('max_epoch_num', 200, '')
 FLAGS = flags.FLAGS
 
@@ -17,8 +18,8 @@ FLAGS = flags.FLAGS
 
 def main(argv):
     # load data
-    images = np.load(FLAGS.data_dir + 'fmnist_train_data.npy')
-    image_labels = np.load(FLAGS.data_dir + 'fmnist_train_labels.npy')
+    train_images = np.load(FLAGS.data_dir + 'fmnist_train_data.npy')
+    train_labels = np.load(FLAGS.data_dir + 'fmnist_train_labels.npy')
     # train_images, validation_images,
 
     # split into train and validate
@@ -111,5 +112,3 @@ def main(argv):
 
 if __name__ == "__main__":
     tf.app.run()
-
-def train(train_im a
