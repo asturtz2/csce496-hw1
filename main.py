@@ -49,7 +49,7 @@ def main(argv):
 	regularization_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
 	REG_COEFF = 0.000001
 	total_loss = cross_entropy + REG_COEFF * sum(regularization_losses)
-	cross_entropy1 = tf.reduce_mean(total_loss)
+	# cross_entropy1 = tf.reduce_mean(total_loss)
 
 
 
@@ -58,7 +58,7 @@ def main(argv):
 	# set up training and saving functionality
 	global_step_tensor = tf.get_variable('global_step', trainable=False, shape=[], initializer=tf.zeros_initializer)
 	optimizer = tf.train.AdamOptimizer()
-	train_op = optimizer.minimize(cross_entropy, global_step=global_step_tensor)
+	train_op = optimizer.minimize(total_loss, global_step=global_step_tensor)
 	saver = tf.train.Saver()
 
 	with tf.Session() as session:
@@ -78,7 +78,7 @@ def main(argv):
 				batch_xs = batch_xs //255
 				#batch_ys = batch_ys//255
 				#_, train_ce = session.run([train_op, tf.reduce_mean(cross_entropy)], {x: batch_xs, y: batch_ys})
-				_, train_ce = session.run([train_op, cross_entropy1], {input_placeholder: batch_xs, y: batch_ys})
+				_, train_ce = session.run([train_op, total_loss], {input_placeholder: batch_xs, y: batch_ys})
 				ce_vals.append(train_ce)
 
 			avg_train_ce = sum(ce_vals) / len(ce_vals)
@@ -109,13 +109,13 @@ def main(argv):
 				batch_ysv = validation_labels[i*batch_size:(i+1)*batch_size, :]
 				batch_xsv = batch_xsv//255
 				#batch_ysv = batch_ysv //255
-				test_cev, conf_matrix_v, _ = session.run([cross_entropy1, confusion_matrix_op, output], {input_placeholder: batch_xsv, y: batch_ysv})
+				test_cev, conf_matrix_v, _ = session.run([total_loss, confusion_matrix_op, output], {input_placeholder: batch_xsv, y: batch_ysv})
 				ce_vals_v.append(test_cev)
 				conf_mxs_v.append(conf_matrix_v)
 			avg_test_cev = sum(ce_vals_v) / len(ce_vals_v)
 			print('VALIDATION CROSS ENTROPY: ' + str(avg_test_cev))
 			lossControl.append (avg_test_cev)
-			if epoch > 5 : 
+			if epoch > 30 :
 				if (( np.average(lossControl)+1*np.std(lossControl)) < avg_test_cev):
 					print('Early stopping happens at ' + str(epoch))
 					print('the average+1std is: '+str(( np.average(lossControl)+np.std(lossControl))))
@@ -124,7 +124,7 @@ def main(argv):
 			print(str(sum(conf_mxs_v)))
 
 		#print(output)
-		path_prefix = saver.save(session, os.path.join(FLAGS.save_dir,"homework_1", global_step=global_step_tensor))
+		path_prefix = saver.save(session, os.path.join(FLAGS.save_dir,"homework_1"), global_step=global_step_tensor)
 		saver = tf.train.import_meta_graph(path_prefix + '.meta')
 		saver.restore(session, path_prefix)
 		return output
