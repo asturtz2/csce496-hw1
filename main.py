@@ -48,13 +48,8 @@ def main(argv):
 
 	regularization_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
 	REG_COEFF = 0.000001
-<<<<<<< Updated upstream
-	total_loss = cross_entropy + REG_COEFF * sum(regularization_losses)
-	# cross_entropy1 = tf.reduce_mean(total_loss)
-=======
 	total_loss1 = cross_entropy + REG_COEFF * sum(regularization_losses)
 	total_loss = tf.reduce_mean(total_loss1)
->>>>>>> Stashed changes
 
 
 
@@ -112,10 +107,7 @@ def main(argv):
 				batch_xsv = validation_image[i*batch_size:(i+1)*batch_size, :]
 				batch_ysv = validation_labels[i*batch_size:(i+1)*batch_size, :]
 				batch_xsv = batch_xsv//255
-<<<<<<< Updated upstream
 				#batch_ysv = batch_ysv //255
-=======
->>>>>>> Stashed changes
 				test_cev, conf_matrix_v, _ = session.run([total_loss, confusion_matrix_op, output], {input_placeholder: batch_xsv, y: batch_ysv})
 				ce_vals_v.append(test_cev)
 				conf_mxs_v.append(conf_matrix_v)
