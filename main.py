@@ -7,7 +7,7 @@ import model
 flags = tf.app.flags
 flags.DEFINE_string('data_dir', '/work/cse496dl/shared/homework/01/', 'directory where FMNIST is located')
 #TODO: What to use as save dir?
-flags.DEFINE_string('save_dir', '/work/cse496dl/ebrahim31/', 'directory where model graph and weights are saved')
+flags.DEFINE_string('save_dir', 'hw1', 'directory where model graph and weights are saved')
 flags.DEFINE_integer('batch_size', 32, '')
 flags.DEFINE_integer('proportion', 0.9, '')
 flags.DEFINE_integer('max_epoch_num', 200, '')
