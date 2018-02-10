@@ -12,6 +12,13 @@ flags.DEFINE_integer('proportion', 0.9, '')
 flags.DEFINE_integer('max_epoch_num', 200, '')
 FLAGS = flags.FLAGS
 
+models = { 'model-1' : model.model_1
+		 , 'model-2' : model.model_2
+		 , 'model-3' : model.model_3
+		 , 'model-4' : model.model_4
+		 , 'model-5' : model.model_5
+		 , 'model-6' : model.model_6
+		 }
 
 
 def main(argv):
@@ -36,8 +43,8 @@ def main(argv):
 	# TODO: Rewrite in terms of objects and with new architecture
 	# specify the network
 	input_placeholder = tf.placeholder(tf.float32, [None, 784],
-			name='input_placeholder1')
-	output = model.layers6(input_placeholder)
+			name='input_placeholder')
+	output = models[argv[1]](input_placeholder)
 	# define classification loss
 	y = tf.placeholder(tf.float32, [None, 10], name='label')
 
