@@ -38,7 +38,7 @@ def main(argv):
 	# specify the network
 	input_placeholder = tf.placeholder(tf.float32, [None, 784],
 			name='input_placeholder1')
-	output = model.layers(input_placeholder)
+	output = model.layers6(input_placeholder)
 	# define classification loss
 	y = tf.placeholder(tf.float32, [None, 10], name='label')
 
@@ -47,17 +47,11 @@ def main(argv):
 	#cross_entropy = tf.reduce_mean(cross_entropy)
 
 	regularization_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
-	REG_COEFF = 0.000001
-<<<<<<< Updated upstream
+	REG_COEFF = 0.0001
 	total_loss = cross_entropy + REG_COEFF * sum(regularization_losses)
 	# cross_entropy1 = tf.reduce_mean(total_loss)
-=======
 	total_loss1 = cross_entropy + REG_COEFF * sum(regularization_losses)
 	total_loss = tf.reduce_mean(total_loss1)
->>>>>>> Stashed changes
-
-
-
 	confusion_matrix_op = tf.confusion_matrix(tf.argmax(y, axis=1), tf.argmax(output, axis=1), num_classes=10)
 
 	# set up training and saving functionality
@@ -80,7 +74,7 @@ def main(argv):
 			for i in range(train_num_examples // batch_size):
 				batch_xs = train_images_2[i*batch_size:(i+1)*batch_size, :]
 				batch_ys = train_labels_2[i*batch_size:(i+1)*batch_size, :]
-				batch_xs = batch_xs //255
+				#batch_xs = batch_xs //255
 				#_, train_ce = session.run([train_op, tf.reduce_mean(cross_entropy)], {x: batch_xs, y: batch_ys})
 				_, train_ce = session.run([train_op, total_loss], {input_placeholder: batch_xs, y: batch_ys})
 				ce_vals.append(train_ce)
@@ -111,29 +105,26 @@ def main(argv):
 			for i in range(validation_set_num_examples // batch_size):
 				batch_xsv = validation_image[i*batch_size:(i+1)*batch_size, :]
 				batch_ysv = validation_labels[i*batch_size:(i+1)*batch_size, :]
-				batch_xsv = batch_xsv//255
-<<<<<<< Updated upstream
+				#batch_xsv = batch_xsv//255
 				#batch_ysv = batch_ysv //255
-=======
->>>>>>> Stashed changes
 				test_cev, conf_matrix_v, _ = session.run([total_loss, confusion_matrix_op, output], {input_placeholder: batch_xsv, y: batch_ysv})
 				ce_vals_v.append(test_cev)
 				conf_mxs_v.append(conf_matrix_v)
 			avg_test_cev = sum(ce_vals_v) / len(ce_vals_v)
 			print('VALIDATION CROSS ENTROPY: ' + str(avg_test_cev))
 			lossControl.append (avg_test_cev)
-			if epoch > 30 :
-				if (( np.average(lossControl)+1*np.std(lossControl)) < avg_test_cev):
+			if epoch > 5 :
+				
+				if (np.average(lossControl)+0.5*np.std(lossControl) < avg_test_cev):
 					print('Early stopping happens at ' + str(epoch))
 					print('the average+1std is: '+str(( np.average(lossControl)+np.std(lossControl))))
+					path_prefix = saver.save(session, os.path.join("/home/structures/ebrahim31/homework_1","homework_1"), global_step=global_step_tensor)
+					saver = tf.train.import_meta_graph(path_prefix + '.meta')
 					break
 			print('VALIDATION CONFUSION MATRIX:')
 			print(str(sum(conf_mxs_v)))
 
 		#print(output)
-		path_prefix = saver.save(session, os.path.join(FLAGS.save_dir,"homework_1"), global_step=global_step_tensor)
-		saver = tf.train.import_meta_graph(path_prefix + '.meta')
-		saver.restore(session, path_prefix)
 		return output
 if __name__ == "__main__":
 	tf.app.run()
