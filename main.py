@@ -6,7 +6,6 @@ import model
 
 flags = tf.app.flags
 flags.DEFINE_string('data_dir', '/work/cse496dl/shared/homework/01/', 'directory where FMNIST is located')
-#TODO: What to use as save dir?
 flags.DEFINE_string('save_dir', 'hw1', 'directory where model graph and weights are saved')
 flags.DEFINE_integer('batch_size', 32, '')
 flags.DEFINE_integer('proportion', 0.9, '')
@@ -50,8 +49,8 @@ def main(argv):
 	REG_COEFF = 0.0001
 	total_loss = cross_entropy + REG_COEFF * sum(regularization_losses)
 	# cross_entropy1 = tf.reduce_mean(total_loss)
-	total_loss1 = cross_entropy + REG_COEFF * sum(regularization_losses)
-	total_loss = tf.reduce_mean(total_loss1)
+	total_loss = cross_entropy + REG_COEFF * sum(regularization_losses)
+	total_loss = tf.reduce_mean(total_loss)
 	confusion_matrix_op = tf.confusion_matrix(tf.argmax(y, axis=1), tf.argmax(output, axis=1), num_classes=10)
 
 	# set up training and saving functionality
@@ -75,15 +74,10 @@ def main(argv):
 				batch_xs = train_images_2[i*batch_size:(i+1)*batch_size, :]
 				batch_ys = train_labels_2[i*batch_size:(i+1)*batch_size, :]
 				#batch_xs = batch_xs //255
-				#_, train_ce = session.run([train_op, tf.reduce_mean(cross_entropy)], {x: batch_xs, y: batch_ys})
 				_, train_ce = session.run([train_op, total_loss], {input_placeholder: batch_xs, y: batch_ys})
 				ce_vals.append(train_ce)
 
 			avg_train_ce = sum(ce_vals) / len(ce_vals)
-		#   avg_test_cev = sum(ce_vals_v) / len(ce_vals_v)
-		#   print('VALIDATION CROSS ENTROPY: ' + str(avg_test_cev))
-		#   print('VALIDATION CONFUSION MATRIX:')
-		#   print(str(sum(conf_mxs_v)))
 			print('TRAIN CROSS ENTROPY: ' + str(avg_train_ce))
 
 			# report mean test loss
@@ -113,12 +107,11 @@ def main(argv):
 			avg_test_cev = sum(ce_vals_v) / len(ce_vals_v)
 			print('VALIDATION CROSS ENTROPY: ' + str(avg_test_cev))
 			lossControl.append (avg_test_cev)
-			if epoch > 5 :
-				
+			if epoch > 10 :
 				if (np.average(lossControl)+0.5*np.std(lossControl) < avg_test_cev):
 					print('Early stopping happens at ' + str(epoch))
 					print('the average+1std is: '+str(( np.average(lossControl)+np.std(lossControl))))
-					path_prefix = saver.save(session, os.path.join("/home/structures/ebrahim31/homework_1","homework_1"), global_step=global_step_tensor)
+					path_prefix = saver.save(session, os.path.join('/home/structures/ebrahim31/homework_1','homework_1'), global_step=global_step_tensor)
 					saver = tf.train.import_meta_graph(path_prefix + '.meta')
 					break
 			print('VALIDATION CONFUSION MATRIX:')
