@@ -55,7 +55,7 @@ def main(argv):
 
     regularization_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
     REG_COEFF = 0.0001
-    if argv[1] in ['model_1', 'model_2', 'model_5', 'model_6']
+    if argv[1] in ['model_1', 'model_2', 'model_5', 'model_6']:
         total_loss = tf.reduce_mean(cross_entropy)
     else
         total_loss = tf.reduce_mean(cross_entropy + REG_COEFF * sum(regularization_losses))
