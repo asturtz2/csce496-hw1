@@ -35,8 +35,7 @@ def model_3(x):
 def model_4(x):
     with tf.name_scope('linear_model'):
         hidden_1 = dense_layer(x, 'hidden_layer_1', 512)
-        hidden_2 = dense_layer(hidden_1, 'hidden_layer_2', 256)
-        return dense_layer(hidden_2, 'output', 10)
+        return dense_layer(hidden_1, 'output', 10)
 
 def model_5(x):
     keep_prob = 0.7
