@@ -6,7 +6,7 @@ import model
 
 flags = tf.app.flags
 flags.DEFINE_string('data_dir', '/work/cse496dl/shared/homework/01/', 'directory where FMNIST is located')
-flags.DEFINE_string('save_dir', '$HOME/hw1', 'directory where model graph and weights are saved')
+flags.DEFINE_string('save_dir', '/work/cse496dl/asturtz', 'directory where model graph and weights are saved')
 flags.DEFINE_integer('batch_size', 32, '')
 flags.DEFINE_integer('proportion', 0.9, '')
 flags.DEFINE_integer('max_epoch_num', 200, '')
@@ -48,6 +48,7 @@ def main(argv):
     input_placeholder = tf.placeholder(tf.float32, [None, 784],
             name='input_placeholder')
     output = models[argv[1]](input_placeholder)
+    output = tf.identity(output, name = 'output')
     # define classification loss
     y = tf.placeholder(tf.float32, [None, 10], name='label')
 
