@@ -22,6 +22,7 @@ models = { 'model-1' : model.model_1
 
 
 def main(argv):
+    print('Using ' + argv[1])
     # load data
     train_images = np.load(FLAGS.data_dir + 'fmnist_train_data.npy')
     train_labels = np.load(FLAGS.data_dir + 'fmnist_train_labels.npy')
@@ -118,7 +119,11 @@ def main(argv):
                 if (np.average(lossControl)+0.5*np.std(lossControl) < avg_test_cev):
                     print('Early stopping happens at ' + str(epoch))
                     print('the average+1std is: '+str(( np.average(lossControl)+np.std(lossControl))))
-                    path_prefix = saver.save(session, os.path.join('/home/structures/ebrahim31/homework_1','homework_1'), global_step=global_step_tensor)
+                    path_prefix = saver.save(
+                        session,
+                        os.path.join(FLAGS.save_dir,'homework_1'),
+                        global_step=global_step_tensor
+                    )
                     saver = tf.train.import_meta_graph(path_prefix + '.meta')
                     break
             print('VALIDATION CONFUSION MATRIX:')
