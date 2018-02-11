@@ -6,7 +6,7 @@ import model
 
 flags = tf.app.flags
 flags.DEFINE_string('data_dir', '/work/cse496dl/shared/homework/01/', 'directory where FMNIST is located')
-flags.DEFINE_string('save_dir', 'hw1', 'directory where model graph and weights are saved')
+flags.DEFINE_string('save_dir', '$HOME/hw1', 'directory where model graph and weights are saved')
 flags.DEFINE_integer('batch_size', 32, '')
 flags.DEFINE_integer('proportion', 0.9, '')
 flags.DEFINE_integer('max_epoch_num', 200, '')
@@ -55,10 +55,11 @@ def main(argv):
 
     regularization_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
     REG_COEFF = 0.0001
-    total_loss = cross_entropy + REG_COEFF * sum(regularization_losses)
+    if argv[1] in ['model_1', 'model_2', 'model_5', 'model_6']
+        total_loss = tf.reduce_mean(cross_entropy)
+    else
+        total_loss = tf.reduce_mean(cross_entropy + REG_COEFF * sum(regularization_losses))
     # cross_entropy1 = tf.reduce_mean(total_loss)
-    total_loss = cross_entropy + REG_COEFF * sum(regularization_losses)
-    total_loss = tf.reduce_mean(total_loss)
     confusion_matrix_op = tf.confusion_matrix(tf.argmax(y, axis=1), tf.argmax(output, axis=1), num_classes=10)
 
     # set up training and saving functionality
