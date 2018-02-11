@@ -138,10 +138,9 @@ def main(argv):
             print('VALIDATION CONFUSION MATRIX:')
             confusion_sum = sum(conf_mxs_v)
             print(str(confusion_sum))
-            write_heatmap(argv[1] + '-heatmap.png', confusion_sum)
-            write_plot(argv[1] + '-plot.png', training_avgs, lossControl)
 
-
+        write_heatmap(argv[1] + '-heatmap.png', confusion_sum)
+        write_plot(argv[1] + '-plot.png', training_avgs, lossControl)
         #print(output)
         return output
 
