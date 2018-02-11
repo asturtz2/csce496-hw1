@@ -18,6 +18,8 @@ models = { 'model-1' : model.model_1
          , 'model-4' : model.model_4
          , 'model-5' : model.model_5
          , 'model-6' : model.model_6
+         , 'model-7' : model.model_7
+         , 'model-8' : model.model_8
          }
 
 
