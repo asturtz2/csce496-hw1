@@ -79,6 +79,7 @@ def dense_layer(x, layer_name, size, regularize = True):
 
 
 def model_1(x):
+    x = x / 255.0
     with tf.name_scope('linear_model') as scope:
         hidden_1 = tf.layers.dense(
             x,
@@ -115,6 +116,7 @@ def model_2(x):
         return output
 
 def model_3(x):
+    x = x / 255.0
     with tf.name_scope('linear_model') as scope:
         hidden_1 = tf.layers.dense(
             x,
@@ -139,6 +141,7 @@ def model_3(x):
         return output
 
 def model_4(x):
+    x = x / 255.0
     with tf.name_scope('linear_model') as scope:
         hidden_1 = tf.layers.dense(
             x,
@@ -163,6 +166,7 @@ def model_4(x):
         return output
 
 def model_5(x):
+    x = x / 255.0
     KEEP_PROB=0.7
     with tf.name_scope('linear_model') as scope:
         dropped_input = tf.layers.dropout(x, KEEP_PROB)
@@ -185,6 +189,7 @@ def model_5(x):
         return output
 
 def model_6(x):
+    x = x / 255.0
     KEEP_PROB=0.7
     with tf.name_scope('linear_model') as scope:
         dropped_input = tf.layers.dropout(x, KEEP_PROB)
@@ -207,6 +212,7 @@ def model_6(x):
         return output
 
 def model_7(x):
+    x = x / 255.0
     KEEP_PROB=0.7
     with tf.name_scope('linear_model') as scope:
         dropped_input = tf.layers.dropout(x, KEEP_PROB)
@@ -235,6 +241,7 @@ def model_7(x):
         return output
 
 def model_8(x):
+    x = x / 255.0
     KEEP_PROB=0.7
     with tf.name_scope('linear_model') as scope:
         dropped_input = tf.layers.dropout(x, KEEP_PROB)

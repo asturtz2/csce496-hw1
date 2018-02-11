@@ -1,5 +1,8 @@
 import tensorflow as tf
 import numpy as np
+import matplotlib as plt
+import itertools
+
 import os
 import util
 import model
@@ -77,6 +80,7 @@ def main(argv):
         # run training
         batch_size = FLAGS.batch_size
         lossControl = []
+        training_avgs = []
         for epoch in range(FLAGS.max_epoch_num):
             print('Epoch: ' + str(epoch))
             # run gradient steps and report mean loss on train data
@@ -90,6 +94,7 @@ def main(argv):
                 ce_vals.append(train_ce)
 
             avg_train_ce = sum(ce_vals) / len(ce_vals)
+            training_avgs.append(avg_train_ce)
             print('TRAIN CROSS ENTROPY: ' + str(avg_train_ce))
 
             # report mean test loss
@@ -125,15 +130,49 @@ def main(argv):
                     print('the average+1std is: '+str(( np.average(lossControl)+np.std(lossControl))))
                     path_prefix = saver.save(
                         session,
-                        os.path.join(FLAGS.save_dir,'homework_1'),
+                        os.path.join(FLAGS.save_dir, argv[1], 'homework_1'),
                         global_step=global_step_tensor
                     )
                     saver = tf.train.import_meta_graph(path_prefix + '.meta')
                     break
             print('VALIDATION CONFUSION MATRIX:')
-            print(str(sum(conf_mxs_v)))
+            confusion_sum = sum(conf_mxs_v)
+            print(str(confusion_sum))
+            write_heatmap(argv[1] + '-heatmap.png', confusion_sum)
+            write_plot(argv[1] + '-plot.png', training_avgs, lossControl)
+
 
         #print(output)
         return output
+
+#Adapted from Canvas
+def write_heatmap(filename, conf_matrix):
+    conf_matrix = conf_matrix.astype('int')
+    plt.imshow(conf_matrix, interpolation='nearest')
+    plt.colorbar()
+
+    thresh = conf_matrix.max() / 2. # threshold for printing the numbers in black or white
+    for i, j in itertools.product(range(conf_matrix.shape[0]), range(conf_matrix.shape[1])):
+        plt.text(j, i, format(conf_matrix[i, j], 'd'),
+                 horizontalalignment="center",
+                 color="black" if conf_matrix[i, j] > thresh else "white")
+
+    plt.tight_layout()
+    plt.title("Confusion Matrix")
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+    plt.savefig(os.path.join(FLAGS.save_dir, filename), bboxinches = 'tight')
+    plt.close() # Closes for the next plot
+
+def write_plot(filename, train_vals, validation_vals):
+    num_epochs = len(train_vals)
+    x = np.linspace(0, num_epochs, num_epochs)
+    plt.plot(x, train_vals, 'b-', label='Training Cross Entropy')
+    plt.plot(x, validation_vals, 'r-', label='Validation Cross Entropy')
+    plt.legend(loc='upper left')
+    plt.savefig(os.path.join(FLAGS.save_dir, filename), bboxinches = 'tight')
+    plt.close()
+
+
 if __name__ == "__main__":
     tf.app.run()
