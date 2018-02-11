@@ -53,12 +53,12 @@ def main(argv):
     cross_entropy  = tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=output)
     #cross_entropy = tf.reduce_mean(cross_entropy)
 
-    regularization_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
-    REG_COEFF = 0.0001
     if argv[1] in ['model_1', 'model_2', 'model_5', 'model_6']:
         total_loss = tf.reduce_mean(cross_entropy)
-    else
-        total_loss = tf.reduce_mean(cross_entropy + REG_COEFF * sum(regularization_losses))
+    else:
+        regularization_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
+        reg_coeff = 0.0001
+        total_loss = tf.reduce_mean(cross_entropy + reg_coeff * sum(regularization_losses))
     # cross_entropy1 = tf.reduce_mean(total_loss)
     confusion_matrix_op = tf.confusion_matrix(tf.argmax(y, axis=1), tf.argmax(output, axis=1), num_classes=10)
 
