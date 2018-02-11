@@ -3,9 +3,9 @@ import tensorflow as tf
 def regularizer():
     return tf.contrib.layers.l2_regularizer(scale=1.0)
 
-def dense_layer(x, size, regularize = True):
+def dense_layer(x, layer_name, size, regularize = True):
     return tf.layers.dense(
-        x
+        x,
         size,
         kernel_regularizer = regularizer() if regularize else None,
         bias_regularizer   = regularizer() if regularize else None,
@@ -15,67 +15,67 @@ def dense_layer(x, size, regularize = True):
 
 #Rewrites
 def model_1(x):
-    with tf.name_scope('linear_model') as scope:
+    with tf.name_scope('linear_model'):
         hidden_1 = dense_layer(x, 'hidden_layer_1', 256, False)
         hidden_2 = dense_layer(hidden_1, 'hidden_layer_2', 128, False)
         return dense_layer(hidden_2, 'output', 10, False)
 
 def model_2(x):
-    with tf.name_scope('linear_model') as scope:
+    with tf.name_scope('linear_model'):
         hidden_1 = dense_layer(x, 'hidden_layer_1', 512, False)
         hidden_2 = dense_layer(hidden_1, 'hidden_layer_2', 256, False)
         return dense_layer(hidden_2, 'output', 10, False)
 
 def model_3(x):
-    with tf.name_scope('linear_model') as scope:
+    with tf.name_scope('linear_model'):
         hidden_1 = dense_layer(x, 'hidden_layer_1', 256)
         hidden_2 = dense_layer(hidden_1, 'hidden_layer_2', 128)
         return dense_layer(hidden_2, 'output', 10)
 
 def model_4(x):
-    with tf.name_scope('linear_model') as scope:
+    with tf.name_scope('linear_model'):
         hidden_1 = dense_layer(x, 'hidden_layer_1', 512)
         hidden_2 = dense_layer(hidden_1, 'hidden_layer_2', 256)
         return dense_layer(hidden_2, 'output', 10)
 
 def model_5(x):
-    KEEP_PROB=0.7
-    with tf.name_scope('linear_model') as scope:
-        dropped_input = tf.layers.dropout(x, KEEP_PROB)
+    keep_prob = 0.7
+    with tf.name_scope('linear_model'):
+        dropped_input = tf.layers.dropout(x, keep_prob)
         hidden_1 = dense_layer(dropped_input, 'hidden_layer_1', 256, False)
-        dropped_hidden_1 = tf.layers.dropout(hidden_1, KEEP_PROB)
-        hidden_2 = dense_layer(hidden_1, 'hidden_layer_2', 128, False)
-        dropped_hidden_2 = tf.layers.dropout(hidden_2, KEEP_PROB)
+        dropped_hidden_1 = tf.layers.dropout(hidden_1, keep_prob)
+        hidden_2 = dense_layer(dropped_hidden_1, 'hidden_layer_2', 128, False)
+        dropped_hidden_2 = tf.layers.dropout(hidden_2, keep_prob)
         return dense_layer(dropped_hidden_2, 'output', 10, False)
 
 def model_6(x):
-    KEEP_PROB=0.7
-    with tf.name_scope('linear_model') as scope:
-        dropped_input = tf.layers.dropout(x, KEEP_PROB)
+    keep_prob = 0.7
+    with tf.name_scope('linear_model'):
+        dropped_input = tf.layers.dropout(x, keep_prob)
         hidden_1 = dense_layer(dropped_input, 'hidden_layer_1', 512, False)
-        dropped_hidden_1 = tf.layers.dropout(hidden_1, KEEP_PROB)
-        hidden_2 = dense_layer(hidden_1, 'hidden_layer_2', 256, False)
-        dropped_hidden_2 = tf.layers.dropout(hidden_2, KEEP_PROB)
+        dropped_hidden_1 = tf.layers.dropout(hidden_1, keep_prob)
+        hidden_2 = dense_layer(dropped_hidden_1, 'hidden_layer_2', 256, False)
+        dropped_hidden_2 = tf.layers.dropout(hidden_2, keep_prob)
         return dense_layer(dropped_hidden_2, 'output', 10, False)
 
 def model_7(x):
-    KEEP_PROB=0.7
-    with tf.name_scope('linear_model') as scope:
-        dropped_input = tf.layers.dropout(x, KEEP_PROB)
+    keep_prob = 0.7
+    with tf.name_scope('linear_model'):
+        dropped_input = tf.layers.dropout(x, keep_prob)
         hidden_1 = dense_layer(dropped_input, 'hidden_layer_1', 256)
-        dropped_hidden_1 = tf.layers.dropout(hidden_1, KEEP_PROB)
-        hidden_2 = dense_layer(hidden_1, 'hidden_layer_2', 128)
-        dropped_hidden_2 = tf.layers.dropout(hidden_2, KEEP_PROB)
+        dropped_hidden_1 = tf.layers.dropout(hidden_1, keep_prob)
+        hidden_2 = dense_layer(dropped_hidden_1, 'hidden_layer_2', 128)
+        dropped_hidden_2 = tf.layers.dropout(hidden_2, keep_prob)
         return dense_layer(dropped_hidden_2, 'output', 10)
 
 def model_8(x):
-    KEEP_PROB=0.7
-    with tf.name_scope('linear_model') as scope:
-        dropped_input = tf.layers.dropout(x, KEEP_PROB)
+    keep_prob = 0.7
+    with tf.name_scope('linear_model'):
+        dropped_input = tf.layers.dropout(x, keep_prob)
         hidden_1 = dense_layer(dropped_input, 'hidden_layer_1', 512)
-        dropped_hidden_1 = tf.layers.dropout(hidden_1, KEEP_PROB)
-        hidden_2 = dense_layer(hidden_1, 'hidden_layer_2', 256)
-        dropped_hidden_2 = tf.layers.dropout(hidden_2, KEEP_PROB)
+        dropped_hidden_1 = tf.layers.dropout(hidden_1, keep_prob)
+        hidden_2 = dense_layer(dropped_hidden_1, 'hidden_layer_2', 256)
+        dropped_hidden_2 = tf.layers.dropout(hidden_2, keep_prob)
         return dense_layer(dropped_hidden_2, 'output', 10)
 
 
