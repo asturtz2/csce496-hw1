@@ -1,6 +1,5 @@
 import tensorflow as tf
 import numpy as np
-import matplotlib.pyplot as plt
 import itertools
 
 import os
@@ -145,36 +144,5 @@ def main(argv):
         np.save(os.path.join(FLAGS.save_dir, argv[1], 'validation'), lossControl)
         #print(output)
         return output
-
-#Adapted from Canvas
-def write_heatmap(filename, conf_matrix):
-    plt.ioff()
-    conf_matrix = conf_matrix.astype('int')
-    plt.imshow(conf_matrix, interpolation='nearest')
-    plt.colorbar()
-
-    thresh = conf_matrix.max() / 2. # threshold for printing the numbers in black or white
-    for i, j in itertools.product(range(conf_matrix.shape[0]), range(conf_matrix.shape[1])):
-        plt.text(j, i, format(conf_matrix[i, j], 'd'),
-                 horizontalalignment="center",
-                 color="black" if conf_matrix[i, j] > thresh else "white")
-
-    plt.tight_layout()
-    plt.title("Confusion Matrix")
-    plt.ylabel('True label')
-    plt.xlabel('Predicted label')
-    plt.savefig(filename, bboxinches = 'tight')
-    plt.close() # Closes for the next plot
-
-def write_plot(filename, train_vals, validation_vals):
-    num_epochs = len(train_vals)
-    x = np.linspace(0, num_epochs, num_epochs)
-    plt.plot(x, train_vals, 'b-', label='Training Cross Entropy')
-    plt.plot(x, validation_vals, 'r-', label='Validation Cross Entropy')
-    plt.legend(loc='upper left')
-    plt.savefig(filename, bboxinches = 'tight')
-    plt.show()
-    plt.close()
-
 if __name__ == "__main__":
     tf.app.run()
