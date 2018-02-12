@@ -139,13 +139,16 @@ def main(argv):
             confusion_sum = sum(conf_mxs_v)
             print(str(confusion_sum))
 
-        write_heatmap(argv[1] + '-heatmap.png', confusion_sum)
-        write_plot(argv[1] + '-plot.png', training_avgs, lossControl)
+        np.save(os.path.join(FLAGS.save_dir, argv[1], 'conf-matrix'), confusion_sum)
+        np.save(os.path.join(FLAGS.save_dir, argv[1], 'train'),
+                training_avgs)
+        np.save(os.path.join(FLAGS.save_dir, argv[1], 'validation'), lossControl)
         #print(output)
         return output
 
 #Adapted from Canvas
 def write_heatmap(filename, conf_matrix):
+    plt.ioff()
     conf_matrix = conf_matrix.astype('int')
     plt.imshow(conf_matrix, interpolation='nearest')
     plt.colorbar()
@@ -160,7 +163,7 @@ def write_heatmap(filename, conf_matrix):
     plt.title("Confusion Matrix")
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
-    plt.savefig(os.path.join(FLAGS.save_dir, filename), bboxinches = 'tight')
+    plt.savefig(filename, bboxinches = 'tight')
     plt.close() # Closes for the next plot
 
 def write_plot(filename, train_vals, validation_vals):
@@ -169,9 +172,9 @@ def write_plot(filename, train_vals, validation_vals):
     plt.plot(x, train_vals, 'b-', label='Training Cross Entropy')
     plt.plot(x, validation_vals, 'r-', label='Validation Cross Entropy')
     plt.legend(loc='upper left')
-    plt.savefig(os.path.join(FLAGS.save_dir, filename), bboxinches = 'tight')
+    plt.savefig(filename, bboxinches = 'tight')
+    plt.show()
     plt.close()
-
 
 if __name__ == "__main__":
     tf.app.run()
